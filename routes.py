@@ -4,8 +4,8 @@ from handlers.table import Table
 from handlers.table2 import Table2
 
 routes = [
-    ('GET', '/', Main, 'main'),
-    ('GET', '/status', Status, 'status'),
-    ('GET', '/table', Table, 'table'),
-    ('GET', '/table2', Table2, 'table2'),
+    ('GET', '/analytics/', Main, 'main'),
+    ('GET', '/analytics/status', Status, 'status'),
+    ('GET', '/analytics/table', Table, 'table'),
+    ('GET', '/analytics/table2', Table2, 'table2'),
 ]
