@@ -1,0 +1,10 @@
+pip
+numpy
+aiohttp == 2.3.0
+aiohttp_jinja2
+aiohttp-cors
+# aiomongo
+envparse
+ujson
+requests
+uvloop
