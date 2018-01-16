@@ -55,8 +55,8 @@ async def init(loop):
     aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(TEMPLATE_PATH))
 
     # Add static
-    # if DEBUG:
-    app.router.add_static('/', STATIC_PATH, name='static')
+    if DEBUG:
+        app.router.add_static('/', STATIC_PATH, name='static')
 
     # db connect
     client = app.client = await aiomongo.create_client('mongodb://' + MONGO_HOST,
