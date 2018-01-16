@@ -2,7 +2,7 @@ pip
 numpy
 aiohttp == 2.3.0
 aiohttp_jinja2
-aiohttp-cors
+aiohttp-cors == 0.5.3
 # aiomongo
 envparse
 ujson

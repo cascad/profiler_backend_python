@@ -1,10 +1,11 @@
+import asyncio
 import datetime
 import time
-import asyncio
-from aiohttp import web
 import ujson as json
 
-from models.calculate import calc, processor
+from aiohttp import web
+
+from models.calculate import processor
 
 
 def expires_header():

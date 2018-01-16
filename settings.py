@@ -25,5 +25,5 @@ MONGO_HOST = env.str('MONGO_HOST', default='192.168.99.100:27017')
 MONGO_DB_NAME = env.str('MONGO_DB_NAME', default='performance_logs')
 STATIC_PATH = env.str('STATIC_PATH', default=os.getcwd() + "/web_anal_static")
 TEMPLATE_PATH = env.str('TEMPLATE_PATH', default='web_anal_static')
-PROCESSOR_INTERVAL = env.int('PROCESSOR_INTERVAL', default=120)
+PROCESSOR_INTERVAL = env.int('PROCESSOR_INTERVAL', default=300)
 DATASET_COLLECTION = 'ldoe'
