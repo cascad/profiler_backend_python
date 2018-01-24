@@ -1,13 +1,13 @@
-FROM python:slim
+FROM python:3.5-slim
 
-RUN mkdir /app
-
-COPY $PWD/* /app/
-
-RUN apt-get update && apt-get -y install build-essential
+RUN apt-get update && apt-get -y install build-essential git
 
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /app/profiler_frontend
+
+COPY $PWD/ /app/
 
 RUN pip install -r /app/requirements.txt
 

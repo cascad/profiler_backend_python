@@ -41,7 +41,5 @@ services:
       - STATIC_PATH=/app/profiler_frontend/dist
       - TEMPLATE_PATH=/app/profiler_frontend/dist
       - PROCESSOR_INTERVAL=300
-    volumes:
-      - $PWD/profiler_frontend/dist:/app/profiler_frontend/dist
     networks:
       - fluent
