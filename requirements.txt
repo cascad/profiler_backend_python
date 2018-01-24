@@ -4,7 +4,9 @@ aiohttp == 2.3.0
 aiohttp_jinja2
 aiohttp-cors == 0.5.3
 # aiomongo
+##pymongo
 envparse
 ujson
 requests
 uvloop
+##yarl==0.18.0
