@@ -3,7 +3,7 @@ numpy
 aiohttp == 2.3.0
 aiohttp_jinja2
 aiohttp-cors == 0.5.3
-# aiomongo
+git+https://github.com/ZeoAlliance/aiomongo.git#egg=aiomongo
 envparse
 ujson
 requests
