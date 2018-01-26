@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  backend:
+    image: gcr.io/kefirdev/profiler_backend
+    network_mode: "host"
+    environment:
+      - DEBUG=False
+      - HOST=0.0.0.0
+      - PORT=8089
+      - MONGO_HOST=127.0.0.1
+      - MONGO_DB_NAME=performance_logs
+      - STATIC_PATH=/app/profiler_frontend/dist
+      - TEMPLATE_PATH=/app/profiler_frontend/dist
+      - PROCESSOR_INTERVAL=300

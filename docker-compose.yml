@@ -1,0 +1,45 @@
+version: "3"
+
+volumes:
+  mongo_data:
+
+networks:
+  fluent:
+
+services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - fluent
+
+  fluent:
+    image: kefirgames/fluentd-mongo:latest
+    ports:
+      - "24224:24224"
+    environment:
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+      - MONGO_DB=performance_logs
+      - MONGO_COLLECTION=ldoe
+    networks:
+      - fluent
+
+  backend:
+    image: gcr.io/kefirdev/profiler_backend
+    ports:
+      - "8089:8089"
+    environment:
+      - DEBUG=False
+      - HOST=0.0.0.0
+      - PORT=8089
+      - MONGO_HOST=mongo
+      - MONGO_DB_NAME=performance_logs
+      - STATIC_PATH=/app/profiler_frontend/dist
+      - TEMPLATE_PATH=/app/profiler_frontend/dist
+      - PROCESSOR_INTERVAL=300
+    networks:
+      - fluent
