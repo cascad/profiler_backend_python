@@ -2,6 +2,7 @@
 .gitignore
 Dockerfile
 docker*.yml
+*.env*
 profiler_frontend/.git
 profiler_frontend/client
 profiler_frontend/*.*
