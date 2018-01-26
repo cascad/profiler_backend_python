@@ -8,3 +8,6 @@ envparse
 ujson
 requests
 uvloop
+multidict == 3.3.2
+typing == 3.6.2
+yarl == 0.15.0
