@@ -1,0 +1,3 @@
+[submodule "profiler_frontend"]
+	path = profiler_frontend
+	url = git@bitbucket.org:kefirgames/profiler_frontend.git
