@@ -69,7 +69,7 @@ async def init(loop):
     app.proc_update_ts = None
 
     handler = app.make_handler()
-    serv_generator = loop.create_server(handler, SITE_HOST, SITE_PORT)
+    serv_generator = loop.create_server(handler, HOST, PORT)
     return serv_generator, handler, app
 
 

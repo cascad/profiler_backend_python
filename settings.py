@@ -16,14 +16,13 @@ log.addHandler(ch)
 if isfile('environments.env'):
     env.read_envfile('environments.env')
 
-DEBUG = env.bool('DEBUG', default=True)
+DEBUG = env.bool('DEBUG')
 
-SITE_HOST = env.str('HOST', default="192.168.2.209")
-SITE_PORT = env.int('PORT', default=8002)
-SECRET_KEY = env.str('SECRET_KEY', default='Thirty  two  length  bytes  key.')
-MONGO_HOST = env.str('MONGO_HOST', default='192.168.99.100:27017')
-MONGO_DB_NAME = env.str('MONGO_DB_NAME', default='performance_logs')
-STATIC_PATH = env.str('STATIC_PATH', default=os.getcwd() + "/web_anal_static")
-TEMPLATE_PATH = env.str('TEMPLATE_PATH', default='web_anal_static')
-PROCESSOR_INTERVAL = env.int('PROCESSOR_INTERVAL', default=300)
+HOST = env.str('HOST')
+PORT = env.int('PORT')
+MONGO_HOST = env.str('MONGO_HOST')
+MONGO_DB_NAME = env.str('MONGO_DB_NAME')
+STATIC_PATH = env.str('STATIC_PATH')
+TEMPLATE_PATH = env.str('TEMPLATE_PATH')
+PROCESSOR_INTERVAL = env.int('PROCESSOR_INTERVAL')
 DATASET_COLLECTION = 'ldoe'
