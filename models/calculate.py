@@ -50,7 +50,7 @@ async def calc(app):
                 "version": item["version"],
                 "room": item["room"],
                 "short_message": item["short_message"],
-                "label": item["full_message"]
+                "full_message": item["full_message"]
             }
             h = hash(str(clean))
             if h not in hashes:
