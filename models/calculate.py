@@ -1,13 +1,10 @@
 import asyncio
-import datetime
 import inspect
-import traceback
-from pprint import pprint
-import ujson as json
-
-import time
-
 import sys
+import time
+import traceback
+import ujson as json
+from pprint import pprint
 
 import pymongo
 from numpy import percentile
@@ -22,7 +19,7 @@ async def processor(app):
     while True:
         try:
             app.dataset = await calc(app)
-        except Exception:
+        except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             trace = traceback.format_exception(exc_type, exc_value, exc_traceback, limit=5)
             msg = {"exc_type": str(exc_type), "exc_value": str(exc_value), "exc_traceback": trace,
@@ -45,14 +42,14 @@ async def calc(app):
     async with coll.find({}, {"_id": 0}).batch_size(100).sort([('time', pymongo.DESCENDING)]) as cursor:  # .limit(50)
         async for item in cursor:
             # print(item)
-            elapsed = item["elapsed_time"]
+            elapsed = item["elapsed"]
             clean = {
                 "app_name": item["app_name"],
                 "process": item["process"],
                 "version": item["version"],
-                "service": item["service"],
-                "category": item["category"],
-                "label": item["label"]
+                "room": item["room"],
+                "short_message": item["short_message"],
+                "label": item["full_message"]
             }
             h = hash(str(clean))
             if h not in hashes:
