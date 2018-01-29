@@ -26,6 +26,7 @@ async def processor(app):
                    "ref": inspect.stack()[0][3]}
             print("{} Calculate error:\n".format(time.ctime()))
             pprint(msg)
+            app.logger.error(str(msg))
         else:
             print("loaded -> {}".format(time.ctime()))
 

@@ -12,6 +12,27 @@ import routes
 from models.calculate import processor
 from settings import *
 
+import logging
+from logging.handlers import RotatingFileHandler
+
+
+def config_logger():
+    if not os.path.isdir("logs"):
+        os.mkdir("logs")
+
+    logger = logging.getLogger('perf')
+    logger.setLevel(logging.DEBUG)
+    handler = RotatingFileHandler("logs/main.log", maxBytes=10 * 1024 * 1024, backupCount=2,
+                                  encoding="utf8")
+    handler.setLevel(logging.WARN)
+    logger.addHandler(handler)
+
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+
+    return logger
+
 
 async def shutdown(server, app, handler):
     server.close()
@@ -31,6 +52,8 @@ async def init(loop):
     # ]
 
     app = web.Application(loop=loop, )  # middlewares=middle
+
+    app.logger = config_logger()
 
     # route part
     for route in routes.routes:
