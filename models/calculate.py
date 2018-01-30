@@ -9,7 +9,7 @@ from pprint import pprint
 import pymongo
 from numpy import percentile
 
-from settings import DATASET_COLLECTION, PROCESSOR_INTERVAL
+from settings import DATASET_COLLECTION, PROCESSOR_INTERVAL, DEBUG
 
 
 async def processor(app):
@@ -42,7 +42,19 @@ async def calc(app):
     raw_dataset = {}
     async with coll.find({}, {"_id": 0}).batch_size(100).sort([('time', pymongo.DESCENDING)]) as cursor:  # .limit(50)
         async for item in cursor:
-            # print(item)
+
+            # ============================================================= Debug
+            if DEBUG:
+                # print(item)
+                ff = False
+                for i in ("elapsed", "app_name", "process", "version", "room", "short_message", "full_message"):
+                    if i not in item:
+                        ff = True
+                        break
+                if ff:
+                    continue
+            # ============================================================= End Debug
+
             elapsed = item["elapsed"]
             clean = {
                 "app_name": item["app_name"],
@@ -63,17 +75,20 @@ async def calc(app):
 
     processed_dataset = {}
     for k, v in raw_dataset.items():
-        percentiles = [
-            round(percentile(raw_dataset[k], 2), 3),
-            round(percentile(raw_dataset[k], 25), 3),
-            round(percentile(raw_dataset[k], 50), 3),
-            round(percentile(raw_dataset[k], 75), 3),
-            round(percentile(raw_dataset[k], 98), 3),
+        percentiles = {
+            "count": len(raw_dataset[k]),
+            "2_percentile": round(percentile(raw_dataset[k], 2), 3),
+            "25_percentile": round(percentile(raw_dataset[k], 25), 3),
+            "50_percentile": round(percentile(raw_dataset[k], 50), 3),
+            "75_percentile": round(percentile(raw_dataset[k], 75), 3),
+            "90_percentile": round(percentile(raw_dataset[k], 90), 3),
+            "98_percentile": round(percentile(raw_dataset[k], 98), 3),
+            "full_time": sum(raw_dataset[k]),
             # percentile(raw_dataset[k], 25),
             # percentile(raw_dataset[k], 50),
             # percentile(raw_dataset[k], 75),
             # percentile(raw_dataset[k], 98),
-        ]
+        }
         processed_dataset[json.dumps(hashes[k])] = percentiles
     # pprint(processed_dataset)
     return processed_dataset
