@@ -40,7 +40,7 @@ async def calc(app):
     coll = app.db.get_collection(DATASET_COLLECTION)
     hashes = {}
     raw_dataset = {}
-    async with coll.find({}, {"_id": 0}).batch_size(100).sort([('time', pymongo.DESCENDING)]) as cursor:  # .limit(50)
+    async with coll.find({}, {"_id": 0}) as cursor:  # .limit(50) # .batch_size(10).sort([('time', pymongo.DESCENDING)])
         async for item in cursor:
 
             # ============================================================= Debug
