@@ -67,7 +67,7 @@ async def calc(app):
             h = hash(str(clean))
             if h not in hashes:
                 hashes[h] = clean
-                hashes[h]["time"] = str(item["time"].date())
+                hashes[h]["time"] = str(item["time"].timestamp())
                 raw_dataset[h] = [elapsed, ]
             else:
                 raw_dataset[h].append(elapsed)
