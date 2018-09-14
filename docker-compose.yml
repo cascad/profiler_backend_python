@@ -38,8 +38,8 @@ services:
       - PORT=8089
       - MONGO_HOST=mongo
       - MONGO_DB_NAME=performance_logs
-      - STATIC_PATH=/app/profiler_frontend/dist
-      - TEMPLATE_PATH=/app/profiler_frontend/dist
+      - STATIC_PATH=/app/profiler_frontend/build
+      - TEMPLATE_PATH=/app/profiler_frontend/build
       - PROCESSOR_INTERVAL=300
     networks:
       - fluent
