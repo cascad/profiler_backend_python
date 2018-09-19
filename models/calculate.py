@@ -18,7 +18,7 @@ async def processor(app):
 
     while True:
         try:
-            app.dataset = await calc(app)
+            app.dataset = await calc({}, app)
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             trace = traceback.format_exception(exc_type, exc_value, exc_traceback, limit=5)
@@ -36,11 +36,104 @@ async def processor(app):
         await asyncio.sleep(sleep_time)
 
 
-async def calc(app):
+async def groups(start_ts, end_ts, fields: set, app):
     coll = app.db.get_collection(DATASET_COLLECTION)
     hashes = {}
     raw_dataset = {}
-    async with coll.find({}, {"_id": 0}) as cursor:  # .limit(50) # .batch_size(10).sort([('time', pymongo.DESCENDING)])
+
+    find_filter = {}
+
+    if start_ts is not None:
+        if find_filter.get("time") is None:
+            find_filter["time"] = {}
+        find_filter["time"]["$gte"] = start_ts
+    if end_ts is not None:
+        if find_filter.get("time") is None:
+            find_filter["time"] = {}
+        find_filter["time"]["$lte"] = end_ts
+
+    async with coll.find(find_filter,
+                         {"_id": 0}) as cursor:  # .limit(50) # .batch_size(10).sort([('time', pymongo.DESCENDING)])
+        async for item in cursor:
+
+            # ============================================================= Debug
+            if DEBUG:
+                # print(item)
+                ff = False
+                for i in ("elapsed", "app_name", "process", "version", "room", "short_message", "full_message"):
+                    if i not in item:
+                        ff = True
+                        break
+                if ff:
+                    continue
+            # ============================================================= End Debug
+
+            elapsed = item["elapsed"]
+            clean = {
+                "app_name": item["app_name"],
+                "process": item["process"],
+                "version": item["version"],
+                "room": item["room"],
+                "short_message": item["short_message"],
+                "full_message": item["full_message"],
+                "time": item["time"]
+            }
+            hashable = {}
+
+            for field in fields:
+                hashable[field] = clean[field]
+
+            h = json.dumps(hashable, sort_keys=True)
+
+            if h not in hashes:
+                hashes[h] = {
+                    "app_name": clean["app_name"],
+                    "process": clean["process"],
+                    "version": clean["version"],
+                    "room": clean["room"],
+                    "short_message": clean["short_message"],
+                    "full_message": clean["full_message"],
+                    "time": clean["time"].timestamp()
+                }
+
+                hashes[h]["time"] = str(item["time"].timestamp())
+                raw_dataset[h] = [elapsed, ]
+            else:
+                for field in ('app_name', 'process', 'version', 'room', 'short_message', 'full_message', 'time'):
+                    val = hashes[h].get(field)
+                    if val not in (None, "mixed", clean[field]):
+                        hashes[h][field] = "mixed"
+
+                raw_dataset[h].append(elapsed)
+
+    processed_dataset = []
+    for k, v in raw_dataset.items():
+        percentiles = {
+            "count": len(raw_dataset[k]),
+            "2_percentile": round(percentile(raw_dataset[k], 2), 3),
+            "25_percentile": round(percentile(raw_dataset[k], 25), 3),
+            "50_percentile": round(percentile(raw_dataset[k], 50), 3),
+            "75_percentile": round(percentile(raw_dataset[k], 75), 3),
+            "90_percentile": round(percentile(raw_dataset[k], 90), 3),
+            "98_percentile": round(percentile(raw_dataset[k], 98), 3),
+            "100_percentile": round(percentile(raw_dataset[k], 100), 3),
+            "full_time": sum(raw_dataset[k]),
+            # percentile(raw_dataset[k], 25),
+            # percentile(raw_dataset[k], 50),
+            # percentile(raw_dataset[k], 75),
+            # percentile(raw_dataset[k], 98),
+        }
+        processed_dataset.append((hashes[k], percentiles))
+    pprint(processed_dataset)
+    return processed_dataset
+
+
+async def calc(filter: dict, app):
+    coll = app.db.get_collection(DATASET_COLLECTION)
+    hashes = {}
+    raw_dataset = {}
+    async with coll.find(filter,
+                         {"_id": 0}) as cursor:  # .limit(50) # .batch_size(10).sort([('time', pymongo.DESCENDING)])
         async for item in cursor:
 
             # ============================================================= Debug
@@ -71,7 +164,6 @@ async def calc(app):
                 raw_dataset[h] = [elapsed, ]
             else:
                 raw_dataset[h].append(elapsed)
-    # pprint(raw_dataset)
 
     processed_dataset = {}
     for k, v in raw_dataset.items():
@@ -83,6 +175,7 @@ async def calc(app):
             "75_percentile": round(percentile(raw_dataset[k], 75), 3),
             "90_percentile": round(percentile(raw_dataset[k], 90), 3),
             "98_percentile": round(percentile(raw_dataset[k], 98), 3),
+            "100_percentile": round(percentile(raw_dataset[k], 100), 3),
             "full_time": sum(raw_dataset[k]),
             # percentile(raw_dataset[k], 25),
             # percentile(raw_dataset[k], 50),

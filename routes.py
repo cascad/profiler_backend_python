@@ -1,4 +1,5 @@
 from handlers.main import Main
+from handlers.reduce import Reduce
 from handlers.status import Status
 from handlers.table import Table
 from handlers.table2 import Table2
@@ -8,4 +9,5 @@ routes = [
     ('GET', '/status', Status, 'status'),
     ('POST', '/table', Table, 'table'),
     ('GET', '/table2', Table2, 'table2'),
+    ('POST', '/reduce', Reduce, 'reduce'),
 ]
