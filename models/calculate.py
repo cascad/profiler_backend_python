@@ -182,5 +182,4 @@ async def calc(filter: dict, app):
             # percentile(raw_dataset[k], 98),
         }
         processed_dataset[json.dumps(hashes[k])] = percentiles
-    # pprint(processed_dataset)
     return processed_dataset
