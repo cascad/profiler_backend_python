@@ -138,7 +138,6 @@ async def calc(filter: dict, app):
 
             # ============================================================= Debug
             if DEBUG:
-                # print(item)
                 ff = False
                 for i in ("elapsed", "app_name", "process", "version", "room", "short_message", "full_message"):
                     if i not in item:
