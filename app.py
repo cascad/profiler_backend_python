@@ -9,7 +9,7 @@ import jinja2
 from aiohttp import web
 
 import routes
-from models.calculate import processor
+from models.calculate import drain_processor
 from settings import *
 
 import logging
@@ -87,8 +87,11 @@ async def init(loop):
     app.db = client.get_database(MONGO_DB_NAME)
     # end db connect
 
-    app.processor = asyncio.ensure_future(processor(app))
-    app.dataset = None
+    # app.processor = asyncio.ensure_future(processor(app))
+    # app.dataset = None
+    app["raw_dataset"] = None
+    app.processor = asyncio.ensure_future(drain_processor(app))
+
     app.proc_update_ts = None
 
     handler = app.make_handler()

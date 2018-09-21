@@ -5,7 +5,7 @@ import ujson as json
 
 from aiohttp import web
 
-from models.calculate import processor
+from models.calculate import drain_processor
 
 
 def expires_header():
@@ -18,7 +18,7 @@ class Status(web.View):
         # data = await self.request.json()
         proc_status = not app.processor.done()
         if not proc_status:
-            app.processor = asyncio.ensure_future(processor(app))
+            app.processor = asyncio.ensure_future(drain_processor(app))
         next_update = time.ctime(app.proc_update_ts)
         response = {"code": 0 if proc_status else 1, "response": next_update}
         rsp = web.Response(content_type='application/json', text=json.dumps(response))

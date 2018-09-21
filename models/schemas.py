@@ -39,6 +39,11 @@ def json_data_validator(field, value, error):
         error(field, "must be an json format")
 
 
+table_schema = {
+    "start_ts": {"coerce": "isotime"},
+    "end_ts": {"coerce": "isotime"}
+}
+
 filter_schema = {
     "fields": {
         "type": "list",
