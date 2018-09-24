@@ -55,13 +55,15 @@ class Table3(web.View):
         s1 = time.time()
         result_dataset = []
         cc = 0
+
         for ihash, item in items.items():
             if check_ts(item["time"], start_ts, end_ts):
                 cval = values[ihash]
                 result_dataset.append((item, cval))
                 cc += 1
+
         s2 = time.time()
-        print("s3", s2 - s1, cc)
+        print("t", s2 - s1, cc)
 
         response = {"code": 0, "response": result_dataset}
         # rsp = web.StreamResponse()

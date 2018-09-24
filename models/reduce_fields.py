@@ -1,3 +1,4 @@
+import copy
 import time
 
 from numpy import percentile
@@ -31,7 +32,7 @@ async def local_groups(start_ts, end_ts, fields: set, raw_dataset: dict):
 
             if h not in hashes:
                 hashes[h] = item
-                values[h] = elapsed
+                values[h] = copy.copy(elapsed)
             else:
                 for field in ('app_name', 'process', 'version', 'room', 'short_message', 'full_message', 'time'):
                     val = hashes.get(field)
