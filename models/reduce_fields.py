@@ -31,12 +31,13 @@ async def local_groups(start_ts, end_ts, fields: set, raw_dataset: dict):
             h = hash_item(fields, item)
 
             if h not in hashes:
-                hashes[h] = item
-                values[h] = copy.copy(elapsed)
+                hashes[h] = copy.deepcopy(item)
+                values[h] = copy.deepcopy(elapsed)
             else:
                 for field in ('app_name', 'process', 'version', 'room', 'short_message', 'full_message', 'time'):
-                    val = hashes.get(field)
-                    if val not in (None, "mixed", item[field]):
+                    val = hashes[h][field]
+                    if val not in ("mixed", item[field]):
+                        # print("mix", field, val, item[field])
                         hashes[h][field] = "mixed"
                 values[h].extend(elapsed)
 

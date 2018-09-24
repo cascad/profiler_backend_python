@@ -44,7 +44,6 @@ class ReduceLocal(web.View):
         # rsp = web.StreamResponse()
         # rsp.enable_chunked_encoding()
         # await rsp.prepare(self.request)
-        print(len(result))
         rsp = web.Response(content_type='application/octet-stream', body=json.dumps(response))
         # rsp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
         # rsp.headers["Expires"] = expires_header()
